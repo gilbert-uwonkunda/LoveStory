@@ -1,0 +1,902 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Rightman & Patience — A Map to our Love Story</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Tenor+Sans&family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,700;1,6..96,400;1,6..96,700&family=Cormorant:ital,wght@0,300;0,400;1,300;1,400&display=swap" rel="stylesheet"/>
+<style>
+/* ════════════════════════════════════════
+   RESET & ROOT
+════════════════════════════════════════ */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --void:#05040a;
+  --deep:#0c0917;
+  --gold:#e8c97a;
+  --gold2:#f5dfa0;
+  --rose:#c4526e;
+  --rose2:#e87a94;
+  --ivory:#f5efe2;
+  --mist:rgba(245,239,226,0.55);
+  --glow:rgba(232,201,122,0.18);
+}
+html{scroll-behavior:smooth;scroll-snap-type:y mandatory}
+body{
+  background:var(--void);
+  color:var(--ivory);
+  font-family:'Cormorant',Georgia,serif;
+  overflow-x:hidden;
+  cursor:none;
+}
+
+/* ════════════════════════════════════════
+   CUSTOM CURSOR
+════════════════════════════════════════ */
+#cursor{
+  position:fixed;width:12px;height:12px;
+  border-radius:50%;background:var(--gold);
+  pointer-events:none;z-index:9999;
+  transform:translate(-50%,-50%);
+  transition:transform .15s ease,width .3s,height .3s,background .3s;
+  mix-blend-mode:difference;
+}
+#cursor-ring{
+  position:fixed;width:36px;height:36px;
+  border-radius:50%;border:1px solid rgba(232,201,122,0.5);
+  pointer-events:none;z-index:9998;
+  transform:translate(-50%,-50%);
+  transition:transform .4s ease,width .4s,height .4s;
+}
+body:hover #cursor{transform:translate(-50%,-50%) scale(1)}
+
+/* ════════════════════════════════════════
+   CANVAS PARTICLE LAYER
+════════════════════════════════════════ */
+#starfield{
+  position:fixed;inset:0;z-index:0;
+  pointer-events:none;opacity:.7;
+}
+
+/* ════════════════════════════════════════
+   SCROLL PROGRESS
+════════════════════════════════════════ */
+#prog{
+  position:fixed;top:0;left:0;height:1px;
+  background:linear-gradient(90deg,var(--rose),var(--gold),var(--rose2));
+  z-index:1000;width:0;transition:width .08s linear;
+}
+
+/* ════════════════════════════════════════
+   SECTION SNAP
+════════════════════════════════════════ */
+.panel{
+  position:relative;
+  min-height:100vh;
+  scroll-snap-align:start;
+  display:flex;align-items:center;justify-content:center;
+  overflow:hidden;z-index:1;
+}
+
+/* ════════════════════════════════════════
+   COVER — CINEMATIC HERO
+════════════════════════════════════════ */
+#cover{
+  flex-direction:column;
+  background:#000;
+}
+
+.cover-photo{
+  position:absolute;inset:0;
+  width:100%;height:100%;
+  object-fit:cover;object-position:center top;
+  opacity:0;
+  animation:photofade 2s ease 0.5s forwards;
+  filter:brightness(.55) contrast(1.1) saturate(.85);
+}
+
+@keyframes photofade{to{opacity:1}}
+
+.cover-vignette{
+  position:absolute;inset:0;
+  background:
+    radial-gradient(ellipse 80% 60% at 50% 50%, transparent 30%, rgba(5,4,10,.7) 100%),
+    linear-gradient(to top, rgba(5,4,10,1) 0%, rgba(5,4,10,.3) 40%, transparent 70%),
+    linear-gradient(to bottom, rgba(5,4,10,.8) 0%, transparent 25%);
+  z-index:1;
+}
+
+/* Animated grain overlay */
+.grain{
+  position:absolute;inset:0;z-index:2;
+  opacity:.035;pointer-events:none;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  animation:grain 0.4s steps(1) infinite;
+}
+@keyframes grain{
+  0%{transform:translate(0,0)}10%{transform:translate(-2%,-3%)}20%{transform:translate(3%,2%)}
+  30%{transform:translate(-1%,3%)}40%{transform:translate(2%,-1%)}50%{transform:translate(-3%,2%)}
+  60%{transform:translate(1%,-2%)}70%{transform:translate(3%,1%)}80%{transform:translate(-2%,3%)}
+  90%{transform:translate(2%,-3%)}100%{transform:translate(0,0)}
+}
+
+.cover-inner{
+  position:relative;z-index:3;
+  text-align:center;padding:2rem;
+  display:flex;flex-direction:column;align-items:center;
+}
+
+.cover-date{
+  font-family:'Tenor Sans',sans-serif;
+  font-size:.62rem;letter-spacing:.8em;
+  text-transform:uppercase;color:var(--gold);
+  opacity:0;animation:slideup .8s ease 1.2s forwards;
+  margin-bottom:2.5rem;
+}
+
+.cover-names{
+  font-family:'Bodoni Moda',serif;
+  font-size:clamp(3.5rem,10vw,8rem);
+  font-weight:700;line-height:.9;
+  letter-spacing:-.02em;
+  color:var(--ivory);
+  opacity:0;animation:slideup 1s ease 1.4s forwards;
+  position:relative;
+}
+
+.cover-names .amp{
+  font-style:italic;font-weight:400;
+  color:var(--gold);font-size:.7em;
+  display:block;line-height:1.1;
+}
+
+/* Glowing underline animated */
+.cover-names::after{
+  content:'';position:absolute;
+  bottom:-16px;left:50%;transform:translateX(-50%);
+  width:0;height:1px;
+  background:linear-gradient(90deg,transparent,var(--gold),transparent);
+  animation:lineexpand 1.2s ease 2.2s forwards;
+}
+@keyframes lineexpand{to{width:80%}}
+
+.cover-tagline{
+  font-size:clamp(.95rem,2vw,1.3rem);
+  font-style:italic;font-weight:300;
+  color:var(--mist);line-height:1.9;
+  max-width:50ch;margin:3rem auto 2.5rem;
+  opacity:0;animation:slideup .9s ease 1.8s forwards;
+}
+
+.cover-scroll-hint{
+  opacity:0;animation:slideup .8s ease 2.4s forwards;
+  display:flex;flex-direction:column;align-items:center;gap:.6rem;
+  font-family:'Tenor Sans',sans-serif;
+  font-size:.55rem;letter-spacing:.5em;text-transform:uppercase;
+  color:rgba(245,239,226,.4);
+}
+.scroll-line-anim{
+  width:1px;height:50px;
+  background:linear-gradient(to bottom,var(--gold),transparent);
+  animation:scrollpulse 2s ease infinite;
+}
+@keyframes scrollpulse{
+  0%,100%{opacity:.3;transform:scaleY(1)}
+  50%{opacity:1;transform:scaleY(1.2)}
+}
+
+@keyframes slideup{
+  from{opacity:0;transform:translateY(30px)}
+  to{opacity:1;transform:none}
+}
+
+/* ════════════════════════════════════════
+   CHAPTER LABEL
+════════════════════════════════════════ */
+.chapter-label{
+  position:absolute;top:2.5rem;left:50%;
+  transform:translateX(-50%);
+  font-family:'Tenor Sans',sans-serif;
+  font-size:.55rem;letter-spacing:.8em;
+  text-transform:uppercase;color:var(--gold);
+  opacity:.6;z-index:10;white-space:nowrap;
+}
+
+/* ════════════════════════════════════════
+   POEM PANEL — dark, star bg
+════════════════════════════════════════ */
+#poem{
+  flex-direction:column;
+  background:linear-gradient(160deg,var(--void) 0%,#0f0820 50%,var(--deep) 100%);
+  padding:6rem 2rem;
+}
+
+.poem-wrap{
+  max-width:680px;text-align:center;
+  position:relative;z-index:2;
+}
+
+.poem-line{
+  display:block;
+  font-size:clamp(1.15rem,2.8vw,1.7rem);
+  font-style:italic;font-weight:300;
+  line-height:2.1;color:var(--ivory);
+  opacity:0;transform:translateY(20px);
+  transition:opacity .9s ease,transform .9s ease;
+}
+.poem-line.on{opacity:1;transform:none}
+
+/* Decorative rotating glyph */
+.star-glyph{
+  font-size:1.2rem;color:var(--gold);
+  display:block;margin:2.5rem auto;
+  opacity:0;transition:opacity .8s ease;
+  animation:rotateStar 20s linear infinite;
+}
+.star-glyph.on{opacity:.6}
+@keyframes rotateStar{to{transform:rotate(360deg)}}
+
+.poem-bold{
+  font-family:'Bodoni Moda',serif;
+  font-size:clamp(1.4rem,3.5vw,2.2rem);
+  font-weight:700;font-style:italic;
+  color:var(--gold);
+  display:block;margin:2rem auto;
+  opacity:0;transform:translateY(16px);
+  transition:opacity 1s ease .2s,transform 1s ease .2s;
+}
+.poem-bold.on{opacity:1;transform:none}
+
+/* ════════════════════════════════════════
+   INVITE PANEL
+════════════════════════════════════════ */
+#invite{
+  background:var(--void);
+  flex-direction:column;
+}
+
+.invite-inner{
+  position:relative;z-index:2;
+  max-width:700px;text-align:center;padding:4rem 2rem;
+}
+
+/* Big decorative quote marks */
+.big-quote{
+  font-family:'Bodoni Moda',serif;
+  font-size:clamp(4rem,12vw,9rem);
+  color:var(--gold);opacity:.08;
+  line-height:.7;display:block;
+  font-style:italic;
+  user-select:none;pointer-events:none;
+}
+
+.invite-text{
+  font-size:clamp(1.1rem,2.5vw,1.5rem);
+  font-style:italic;font-weight:300;
+  line-height:2;color:var(--mist);
+  opacity:0;transform:translateY(20px);
+  transition:opacity .9s ease,transform .9s ease;
+}
+.invite-text.on{opacity:1;transform:none}
+
+.invite-names{
+  font-family:'Bodoni Moda',serif;
+  font-size:clamp(2rem,5vw,3.5rem);
+  font-weight:700;color:var(--ivory);
+  margin:2rem 0 1rem;letter-spacing:.03em;
+  opacity:0;transform:translateY(20px);
+  transition:opacity .9s ease .15s,transform .9s ease .15s;
+}
+.invite-names.on{opacity:1;transform:none}
+
+/* ════════════════════════════════════════
+   LOCATION PANEL — immersive
+════════════════════════════════════════ */
+#location{
+  flex-direction:column;align-items:stretch;
+  padding:0;background:var(--void);
+  min-height:100vh;
+}
+
+.loc-header{
+  padding:5rem 5vw 3rem;text-align:center;
+  position:relative;z-index:2;
+}
+
+.loc-header h2{
+  font-family:'Bodoni Moda',serif;
+  font-size:clamp(2rem,5vw,3.8rem);
+  font-weight:400;font-style:italic;
+  color:var(--ivory);margin-bottom:.5rem;
+}
+
+.loc-header .sub{
+  font-family:'Tenor Sans',sans-serif;
+  font-size:.6rem;letter-spacing:.7em;
+  text-transform:uppercase;color:var(--gold);
+}
+
+/* Horizontal scroll venue strip */
+.venues-track{
+  display:flex;gap:0;overflow-x:auto;
+  scroll-snap-type:x mandatory;
+  scrollbar-width:none;
+  -webkit-overflow-scrolling:touch;
+  padding-bottom:0;
+  position:relative;z-index:2;
+}
+.venues-track::-webkit-scrollbar{display:none}
+
+.venue{
+  flex:0 0 calc(100vw - 4rem);
+  scroll-snap-align:start;
+  margin:0 2rem;
+  position:relative;border:1px solid rgba(232,201,122,.12);
+  overflow:hidden;
+  opacity:0;transform:translateX(40px);
+  transition:opacity .8s ease,transform .8s ease,border-color .4s;
+  cursor:pointer;
+}
+.venue:hover{border-color:rgba(232,201,122,.45)}
+
+@media(min-width:900px){
+  .venues-track{padding:0 5vw}
+  .venue{flex:0 0 32vw;margin:0 .75rem}
+}
+
+.venue-img{
+  width:100%;height:340px;
+  object-fit:cover;display:block;
+  filter:brightness(.7) saturate(.8);
+  transition:filter .5s ease,transform .5s ease;
+}
+.venue:hover .venue-img{
+  filter:brightness(.85) saturate(1);
+  transform:scale(1.03);
+}
+
+.venue-body{
+  position:absolute;bottom:0;left:0;right:0;
+  padding:2rem 1.8rem 1.8rem;
+  background:linear-gradient(to top,rgba(5,4,10,.95) 0%,rgba(5,4,10,.6) 60%,transparent 100%);
+}
+
+.venue-num{
+  font-family:'Bodoni Moda',serif;
+  font-size:3rem;font-weight:700;font-style:italic;
+  color:rgba(232,201,122,.15);line-height:1;
+  margin-bottom:.3rem;
+}
+.venue-body h3{
+  font-family:'Bodoni Moda',serif;
+  font-size:1.2rem;font-weight:400;font-style:italic;
+  color:var(--gold2);margin-bottom:.4rem;
+}
+.venue-body p{
+  font-family:'Tenor Sans',sans-serif;
+  font-size:.58rem;letter-spacing:.15em;
+  text-transform:uppercase;
+  color:rgba(245,239,226,.4);line-height:1.6;
+}
+.venue-coords{
+  margin-top:.8rem;
+  font-family:'Tenor Sans',sans-serif;
+  font-size:.52rem;letter-spacing:.25em;
+  color:rgba(232,201,122,.3);text-transform:uppercase;
+}
+
+/* Map */
+.map-strip{
+  height:300px;position:relative;z-index:2;
+  border-top:1px solid rgba(232,201,122,.08);
+  margin-top:2rem;
+}
+.map-strip iframe{width:100%;height:100%;border:none;filter:invert(90%) hue-rotate(180deg) saturate(.7) brightness(.85)}
+
+/* ════════════════════════════════════════
+   RSVP PANEL
+════════════════════════════════════════ */
+#rsvp{
+  flex-direction:column;
+  background:linear-gradient(170deg,var(--deep) 0%,#150820 50%,var(--void) 100%);
+  padding:6rem 5vw;
+}
+
+.rsvp-wrap{
+  max-width:580px;width:100%;
+  position:relative;z-index:2;
+}
+
+/* Decorative border frame */
+.rsvp-frame{
+  border:1px solid rgba(232,201,122,.15);
+  padding:3.5rem;position:relative;
+}
+.rsvp-frame::before,.rsvp-frame::after{
+  content:'';position:absolute;
+  width:30px;height:30px;
+  border-color:var(--gold);border-style:solid;
+}
+.rsvp-frame::before{top:-1px;left:-1px;border-width:2px 0 0 2px}
+.rsvp-frame::after{bottom:-1px;right:-1px;border-width:0 2px 2px 0}
+
+.rsvp-eyebrow{
+  font-family:'Tenor Sans',sans-serif;
+  font-size:.55rem;letter-spacing:.8em;
+  text-transform:uppercase;color:var(--rose2);
+  margin-bottom:1.5rem;text-align:center;
+  opacity:0;transition:opacity .8s ease;
+}
+.rsvp-eyebrow.on{opacity:1}
+
+.rsvp-title{
+  font-family:'Bodoni Moda',serif;
+  font-size:clamp(1.8rem,4vw,2.8rem);
+  font-weight:400;font-style:italic;
+  color:var(--ivory);text-align:center;
+  margin-bottom:.8rem;
+  opacity:0;transform:translateY(16px);
+  transition:opacity .8s ease .1s,transform .8s ease .1s;
+}
+.rsvp-title.on{opacity:1;transform:none}
+
+.rsvp-sub{
+  font-size:1rem;font-style:italic;
+  color:var(--mist);text-align:center;
+  margin-bottom:2.5rem;line-height:1.8;
+  opacity:0;transition:opacity .8s ease .2s;
+}
+.rsvp-sub.on{opacity:1}
+
+/* Form */
+.fg{margin-bottom:1.3rem}
+.fg label{
+  display:block;
+  font-family:'Tenor Sans',sans-serif;
+  font-size:.52rem;letter-spacing:.5em;
+  text-transform:uppercase;color:rgba(232,201,122,.6);
+  margin-bottom:.5rem;
+}
+.fg input,.fg select,.fg textarea{
+  width:100%;padding:.85rem 0;
+  border:none;border-bottom:1px solid rgba(232,201,122,.2);
+  background:transparent;
+  font-family:'Cormorant',serif;font-size:1rem;
+  color:var(--ivory);outline:none;
+  transition:border-color .3s ease;
+  border-radius:0;appearance:none;
+}
+.fg input::placeholder,.fg textarea::placeholder{color:rgba(245,239,226,.25)}
+.fg input:focus,.fg select:focus,.fg textarea:focus{
+  border-bottom-color:var(--gold);
+}
+.fg select option{background:var(--deep);color:var(--ivory)}
+.fg textarea{resize:vertical;min-height:80px}
+
+.fg-row{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem}
+@media(max-width:480px){.fg-row{grid-template-columns:1fr}}
+
+.btn-rsvp{
+  width:100%;padding:1.1rem;
+  background:transparent;
+  border:1px solid rgba(232,201,122,.35);
+  color:var(--gold);
+  font-family:'Tenor Sans',sans-serif;
+  font-size:.6rem;letter-spacing:.6em;
+  text-transform:uppercase;cursor:pointer;
+  position:relative;overflow:hidden;
+  transition:color .4s ease,border-color .4s ease;
+  margin-top:1rem;
+}
+.btn-rsvp::before{
+  content:'';position:absolute;
+  inset:0;background:var(--gold);
+  transform:translateX(-101%);
+  transition:transform .4s ease;
+}
+.btn-rsvp:hover::before{transform:none}
+.btn-rsvp:hover{color:var(--void)}
+.btn-rsvp span{position:relative;z-index:1}
+
+.form-ok{
+  display:none;text-align:center;
+  margin-top:2rem;
+  font-style:italic;font-size:1.1rem;
+  color:var(--rose2);
+}
+
+/* ════════════════════════════════════════
+   FOOTER
+════════════════════════════════════════ */
+footer{
+  scroll-snap-align:start;
+  background:var(--void);
+  border-top:1px solid rgba(232,201,122,.08);
+  padding:4rem 2rem;text-align:center;
+  position:relative;z-index:1;
+}
+
+.footer-names{
+  font-family:'Bodoni Moda',serif;
+  font-size:clamp(2rem,5vw,3.5rem);
+  font-weight:700;font-style:italic;
+  color:rgba(245,239,226,.15);
+  letter-spacing:.04em;
+  display:block;margin-bottom:1.5rem;
+}
+
+.footer-line{
+  font-family:'Tenor Sans',sans-serif;
+  font-size:.55rem;letter-spacing:.6em;
+  text-transform:uppercase;
+  color:rgba(245,239,226,.2);
+}
+.footer-line span{color:var(--gold);opacity:.5}
+
+/* ════════════════════════════════════════
+   SIDE NAV DOTS
+════════════════════════════════════════ */
+.sidenav{
+  position:fixed;right:1.5rem;top:50%;
+  transform:translateY(-50%);
+  display:flex;flex-direction:column;gap:.9rem;
+  z-index:100;
+}
+.sidenav a{
+  width:5px;height:5px;border-radius:50%;
+  background:rgba(232,201,122,.25);
+  display:block;transition:background .3s,transform .3s;
+  text-decoration:none;
+}
+.sidenav a.on{background:var(--gold);transform:scale(1.8)}
+@media(max-width:640px){.sidenav{display:none}}
+
+/* ════════════════════════════════════════
+   FLOATING PETALS (CSS)
+════════════════════════════════════════ */
+.petal{
+  position:fixed;
+  font-size:1rem;
+  opacity:0;
+  pointer-events:none;
+  z-index:0;
+  animation:petalfall linear infinite;
+}
+@keyframes petalfall{
+  0%{opacity:0;transform:translateY(-10vh) rotate(0deg)}
+  10%{opacity:.4}
+  90%{opacity:.2}
+  100%{opacity:0;transform:translateY(110vh) rotate(720deg)}
+}
+</style>
+</head>
+<body>
+
+<!-- Custom cursor -->
+<div id="cursor"></div>
+<div id="cursor-ring"></div>
+
+<!-- Scroll progress -->
+<div id="prog"></div>
+
+<!-- Starfield canvas -->
+<canvas id="starfield"></canvas>
+
+<!-- Side nav -->
+<nav class="sidenav">
+  <a href="#cover"    class="on"  title="Cover"></a>
+  <a href="#poem"     title="Story"></a>
+  <a href="#invite"   title="Invitation"></a>
+  <a href="#location" title="Venues"></a>
+  <a href="#rsvp"     title="RSVP"></a>
+</nav>
+
+<!-- Floating petals -->
+<script>
+;(function(){
+  const glyphs=['✦','✧','·','⋆','∘'];
+  for(let i=0;i<18;i++){
+    const p=document.createElement('div');
+    p.className='petal';
+    p.textContent=glyphs[i%glyphs.length];
+    p.style.cssText=`
+      left:${Math.random()*100}vw;
+      color:${Math.random()>.5?'rgba(232,201,122,0.5)':'rgba(196,82,110,0.4)'};
+      font-size:${.4+Math.random()*.8}rem;
+      animation-duration:${12+Math.random()*20}s;
+      animation-delay:${Math.random()*20}s;
+    `;
+    document.body.appendChild(p);
+  }
+})();
+</script>
+
+<!-- ══ COVER ══ -->
+<section class="panel" id="cover">
+  <div class="grain"></div>
+  <img class="cover-photo"
+    src="https://raw.githubusercontent.com/gilbert-uwonkunda/LoveStory/main/Main.jpeg"
+    alt="Rightman and Patience"
+  />
+  <div class="cover-vignette"></div>
+  <div class="cover-inner">
+    <p class="cover-date">A Map to our Love Story</p>
+    <h1 class="cover-names">
+      Rightman
+      <span class="amp">&</span>
+      Patience
+    </h1>
+    <p class="cover-tagline">
+      Every great love has coordinates.<br/>
+      A first look. A first laugh.<br/>
+      A question asked on trembling ground.<br/>
+      <em>This is the map of ours.</em>
+    </p>
+    <div class="cover-scroll-hint">
+      <div class="scroll-line-anim"></div>
+      <span>scroll to begin</span>
+    </div>
+  </div>
+</section>
+
+<!-- ══ POEM ══ -->
+<section class="panel" id="poem" style="scroll-snap-align:start">
+  <p class="chapter-label">Chapter I — The Beginning</p>
+  <div class="poem-wrap">
+    <span class="poem-line rv" style="transition-delay:.0s"><em>Rightman and Patience did not plan to fall in love.</em></span>
+    <span class="poem-line rv" style="transition-delay:.15s"><em>Most people don't.</em></span>
+    <span class="poem-line rv" style="transition-delay:.3s"><em>It happened the way seasons change —</em></span>
+    <span class="poem-line rv" style="transition-delay:.45s"><em>gradually, then all at once.</em></span>
+
+    <span class="star-glyph rv" style="transition-delay:.6s">✦</span>
+
+    <span class="poem-line rv" style="transition-delay:.75s"><em>This map is not just geography.</em></span>
+    <span class="poem-line rv" style="transition-delay:.9s"><em>It is memory made visible.</em></span>
+    <span class="poem-line rv" style="transition-delay:1.05s"><em>Every pin, a heartbeat.</em></span>
+    <span class="poem-line rv" style="transition-delay:1.2s"><em>Every place, a page of something</em></span>
+    <span class="poem-line rv" style="transition-delay:1.35s"><em>neither of them could have written alone.</em></span>
+
+    <span class="poem-bold rv" style="transition-delay:1.5s">
+      Walk with them.<br/>From the first hello — to forever.
+    </span>
+  </div>
+</section>
+
+<!-- ══ INVITE ══ -->
+<section class="panel" id="invite">
+  <p class="chapter-label">Chapter II — The Promise</p>
+  <div class="invite-inner">
+    <span class="big-quote">"</span>
+    <p class="invite-text rv">
+      They decided to tie the knot —<br/>
+      to fulfil nature's oldest promise.<br/>
+      And they would gladly have you<br/>witness their forever.
+    </p>
+    <p class="invite-names rv">Rightman <em style="color:var(--gold);font-weight:400">&</em> Patience</p>
+    <p class="invite-text rv" style="transition-delay:.3s;font-size:1rem;color:rgba(245,239,226,.4)">
+      request the honour of your presence
+    </p>
+  </div>
+</section>
+
+<!-- ══ LOCATION ══ -->
+<section class="panel" id="location" style="flex-direction:column;align-items:stretch;scroll-snap-align:start">
+  <p class="chapter-label">Chapter III — The Journey</p>
+  <div class="loc-header">
+    <p class="sub">Wedding Venues</p>
+    <h2>Where It Happens</h2>
+  </div>
+
+  <div class="venues-track" id="venueTrack">
+
+    <div class="venue rv">
+      <img class="venue-img"
+        src="https://raw.githubusercontent.com/gilbert-uwonkunda/LoveStory/main/Dowry.jpg"
+        alt="Green Jade Garden Dowry"
+      />
+      <div class="venue-body">
+        <div class="venue-num">01</div>
+        <h3>Green Jade Garden Dowry</h3>
+        <p>Where traditions are honoured<br/>and families become one</p>
+        <div class="venue-coords">30.0860° E · 2.0002° S</div>
+      </div>
+    </div>
+
+    <div class="venue rv" style="transition-delay:.15s">
+      <img class="venue-img"
+        src="https://raw.githubusercontent.com/gilbert-uwonkunda/LoveStory/main/Church.png"
+        alt="Christian Church Assembly"
+      />
+      <div class="venue-body">
+        <div class="venue-num">02</div>
+        <h3>Christian Church Assembly</h3>
+        <p>Where vows are spoken<br/>and heaven bears witness</p>
+        <div class="venue-coords">30.1054° E · 1.9477° S</div>
+      </div>
+    </div>
+
+    <div class="venue rv" style="transition-delay:.3s">
+      <img class="venue-img"
+        src="https://raw.githubusercontent.com/gilbert-uwonkunda/LoveStory/main/Reception.jpg"
+        alt="Reception — Green Jade Garden"
+      />
+      <div class="venue-body">
+        <div class="venue-num">03</div>
+        <h3>Reception — Green Jade Garden</h3>
+        <p>Where celebration takes flight<br/>and forever officially begins</p>
+        <div class="venue-coords">30.0860° E · 2.0002° S</div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="map-strip">
+    <iframe
+      src="https://www.openstreetmap.org/export/embed.html?bbox=30.07%2C-2.03%2C30.13%2C-1.93&layer=mapnik"
+      title="Kigali wedding venues map"
+      loading="lazy"
+    ></iframe>
+  </div>
+</section>
+
+<!-- ══ RSVP ══ -->
+<section class="panel" id="rsvp">
+  <p class="chapter-label">Chapter IV — Your Place in the Story</p>
+  <div class="rsvp-wrap">
+    <div class="rsvp-frame">
+      <p class="rsvp-eyebrow rv">Reserve your seat</p>
+      <h2 class="rsvp-title rv">Will you be there?</h2>
+      <p class="rsvp-sub rv">
+        <em>Rightman & Patience would be honoured<br/>to have you witness their forever.</em>
+      </p>
+
+      <form onsubmit="sendRSVP(event)">
+        <div class="fg-row">
+          <div class="fg">
+            <label>First Name</label>
+            <input type="text" placeholder="Your first name" required/>
+          </div>
+          <div class="fg">
+            <label>Last Name</label>
+            <input type="text" placeholder="Your last name" required/>
+          </div>
+        </div>
+        <div class="fg">
+          <label>Email</label>
+          <input type="email" placeholder="your@email.com" required/>
+        </div>
+        <div class="fg">
+          <label>Phone</label>
+          <input type="tel" placeholder="+250 7XX XXX XXX"/>
+        </div>
+        <div class="fg">
+          <label>Attendance</label>
+          <select required>
+            <option value="" disabled selected>Your attendance…</option>
+            <option>Yes — all events</option>
+            <option>Yes — Church ceremony only</option>
+            <option>Yes — Reception only</option>
+            <option>Regretfully unable to attend</option>
+          </select>
+        </div>
+        <div class="fg">
+          <label>Guests</label>
+          <select>
+            <option>Just me (1)</option>
+            <option>Myself + 1 (2)</option>
+            <option>Myself + 2 (3)</option>
+            <option>Myself + 3 (4)</option>
+          </select>
+        </div>
+        <div class="fg">
+          <label>A message for the couple</label>
+          <textarea placeholder="Share your wishes…"></textarea>
+        </div>
+        <button type="submit" class="btn-rsvp" id="rsvpBtn">
+          <span>Reserve My Place</span>
+        </button>
+        <p class="form-ok" id="formOk">
+          ✦ &nbsp;Thank you — your place is reserved. See you there.
+        </p>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- ══ FOOTER ══ -->
+<footer>
+  <span class="footer-names">Rightman & Patience</span>
+  <p class="footer-line">A Map to our Love Story &nbsp;·&nbsp; <span>Forever begins here</span></p>
+</footer>
+
+<script>
+/* ─── CURSOR ─── */
+const cur = document.getElementById('cursor');
+const ring = document.getElementById('cursor-ring');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{
+  mx=e.clientX; my=e.clientY;
+  cur.style.left=mx+'px'; cur.style.top=my+'px';
+});
+(function animRing(){
+  rx+=(mx-rx)*.12; ry+=(my-ry)*.12;
+  ring.style.left=rx+'px'; ring.style.top=ry+'px';
+  requestAnimationFrame(animRing);
+})();
+
+/* ─── STARFIELD ─── */
+(function(){
+  const c=document.getElementById('starfield');
+  const ctx=c.getContext('2d');
+  let W,H,stars=[];
+  function resize(){W=c.width=window.innerWidth;H=c.height=window.innerHeight}
+  resize();window.addEventListener('resize',resize);
+  for(let i=0;i<180;i++) stars.push({
+    x:Math.random()*2000,y:Math.random()*2000,
+    r:.2+Math.random()*.8,
+    o:Math.random(),sp:Math.random()*.003+.001,
+    gold:Math.random()>.7
+  });
+  let t=0;
+  function draw(){
+    ctx.clearRect(0,0,W,H);
+    t+=.008;
+    stars.forEach(s=>{
+      s.o=.2+.6*(Math.sin(t*s.sp*100+s.x)*.5+.5);
+      ctx.beginPath();
+      ctx.arc(s.x%W,s.y%H,s.r,0,Math.PI*2);
+      ctx.fillStyle=s.gold
+        ?`rgba(232,201,122,${s.o})`
+        :`rgba(245,239,226,${s.o*.6})`;
+      ctx.fill();
+    });
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
+
+/* ─── SCROLL PROGRESS ─── */
+const prog=document.getElementById('prog');
+const navDots=document.querySelectorAll('.sidenav a');
+const sections=['cover','poem','invite','location','rsvp'];
+
+window.addEventListener('scroll',()=>{
+  const pct=window.scrollY/(document.body.scrollHeight-window.innerHeight)*100;
+  prog.style.width=pct+'%';
+  sections.forEach((id,i)=>{
+    const el=document.getElementById(id);
+    if(!el)return;
+    const r=el.getBoundingClientRect();
+    if(r.top<=window.innerHeight*.5&&r.bottom>=window.innerHeight*.5){
+      navDots.forEach(d=>d.classList.remove('on'));
+      if(navDots[i])navDots[i].classList.add('on');
+    }
+  });
+});
+
+/* ─── INTERSECTION REVEAL ─── */
+const io=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      e.target.classList.add('on');
+      io.unobserve(e.target);
+    }
+  });
+},{threshold:.12,rootMargin:'0px 0px -40px 0px'});
+document.querySelectorAll('.rv,.poem-line,.star-glyph,.poem-bold,.invite-text,.invite-names,.venue').forEach(el=>io.observe(el));
+
+/* ─── RSVP ─── */
+function sendRSVP(e){
+  e.preventDefault();
+  const btn=document.getElementById('rsvpBtn');
+  const ok=document.getElementById('formOk');
+  btn.querySelector('span').textContent='✦  RSVP Received';
+  btn.style.borderColor='var(--rose)';
+  btn.style.color='var(--rose2)';
+  btn.disabled=true;
+  ok.style.display='block';
+}
+</script>
+</body>
+</html>
