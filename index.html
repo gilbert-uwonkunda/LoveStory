@@ -569,7 +569,7 @@ body{
   background:linear-gradient(170deg,var(--deep) 0%,#3d5030 50%,var(--void) 100%);
   padding:6rem 5vw;
 }
-.rsvp-wrap{max-width:580px;width:100%;position:relative;z-index:2;}
+.rsvp-wrap{max-width:720px;width:100%;position:relative;z-index:2;}
 .rsvp-frame{
   border:1px solid rgba(255,255,255,.15);
   padding:3.5rem;position:relative;
@@ -699,14 +699,158 @@ footer{
 }
 .proposal-caption .p-label{
   font-family:'Tenor Sans',sans-serif;
-  font-size:.58rem;letter-spacing:.8em;text-transform:uppercase;
-  color:rgba(255,255,255,.65);display:block;margin-bottom:1.2rem;
+  font-size:.85rem;letter-spacing:.5em;text-transform:uppercase;
+  color:rgba(255,255,255,.90);display:block;margin-bottom:1.2rem;
 }
 .proposal-caption .p-title{
   font-family:'Bodoni Moda',serif;
   font-size:clamp(2.2rem,7vw,5rem);
   font-weight:400;font-style:italic;color:#fff;
   line-height:1.1;text-shadow:0 2px 30px rgba(0,0,0,.4);
+}
+
+/* ════════════════════════════════
+   CHILDHOOD STRIP
+════════════════════════════════ */
+.childhood-strip{
+  display:flex;gap:clamp(1.5rem,5vw,3rem);
+  justify-content:center;margin-top:4rem;flex-wrap:wrap;
+}
+.cs-item{
+  display:flex;flex-direction:column;align-items:center;gap:.9rem;
+  opacity:0;transform:translateY(24px);
+  transition:opacity .9s ease,transform .9s ease;
+}
+.cs-item.on{opacity:1;transform:none}
+.cs-item:nth-child(2){transition-delay:.25s}
+.cs-photo{
+  width:clamp(140px,28vw,200px);
+  height:clamp(170px,34vw,250px);
+  object-fit:cover;object-position:center top;
+  border:1px solid rgba(255,255,255,.25);
+  filter:brightness(.8) saturate(.6) sepia(.25);
+  transition:filter .5s;
+}
+.cs-photo:hover{filter:brightness(.96) saturate(.95) sepia(0)}
+.cs-name{
+  font-family:'Tenor Sans',sans-serif;
+  font-size:.85rem;letter-spacing:.45em;text-transform:uppercase;
+  color:rgba(255,255,255,.80);
+}
+
+/* ════════════════════════════════
+   FIRST HELLO PANEL
+════════════════════════════════ */
+.firsthello-panel{
+  position:relative;height:100vh;min-height:500px;
+  overflow:hidden;display:grid;grid-template-columns:1fr 1fr;
+}
+.fh-half{position:relative;overflow:hidden}
+.fh-half img{
+  position:absolute;inset:0;width:100%;height:100%;
+  object-fit:cover;object-position:center top;
+  transform:scale(1.04);transition:transform 8s ease;
+}
+.fh-half:hover img{transform:scale(1.0)}
+.fh-overlay{
+  position:absolute;inset:0;z-index:1;
+  background:linear-gradient(
+    to top,
+    rgba(61,80,48,.90) 0%,
+    rgba(61,80,48,.18) 50%,
+    transparent 100%
+  );
+}
+.fh-caption{
+  position:absolute;bottom:0;left:0;right:0;
+  padding:2rem 1.5rem 2.5rem;text-align:center;z-index:2;
+}
+.fh-label{
+  font-family:'Tenor Sans',sans-serif;
+  font-size:.82rem;letter-spacing:.4em;text-transform:uppercase;
+  color:rgba(255,255,255,.85);display:block;margin-bottom:.5rem;
+}
+.fh-name{
+  font-family:'Bodoni Moda',serif;
+  font-size:clamp(1.2rem,2.8vw,1.9rem);
+  font-weight:400;font-style:italic;color:#fff;
+  text-shadow:0 2px 20px rgba(0,0,0,.5);
+}
+.fh-divider{
+  position:absolute;top:0;bottom:0;left:50%;
+  transform:translateX(-50%);
+  width:1px;background:rgba(255,255,255,.3);
+  z-index:5;pointer-events:none;
+}
+.fh-center-label{
+  position:absolute;top:50%;left:50%;
+  transform:translate(-50%,-50%);
+  z-index:10;text-align:center;pointer-events:none;
+}
+.fh-center-label::before,.fh-center-label::after{
+  content:'';display:block;
+  width:1px;height:50px;
+  background:rgba(255,255,255,.4);margin:0 auto;
+}
+.fh-center-label span{
+  font-family:'Bodoni Moda',serif;
+  font-size:clamp(1.4rem,3vw,2.2rem);
+  font-style:italic;color:#fff;
+  background:rgba(61,80,48,.80);
+  padding:.5rem 1.6rem;display:block;
+  text-shadow:0 2px 16px rgba(0,0,0,.4);
+  white-space:nowrap;
+}
+@media(max-width:600px){
+  .firsthello-panel{grid-template-columns:1fr;grid-template-rows:1fr 1fr;height:auto;min-height:100vh}
+  .fh-half{min-height:50vh}
+  .fh-divider{top:50%;bottom:auto;left:0;right:0;width:100%;height:1px;transform:none}
+  .fh-center-label{top:50%}
+}
+
+/* ════════════════════════════════
+   CIVIL PANEL
+════════════════════════════════ */
+.civil-panel{
+  position:relative;height:100vh;min-height:500px;
+  overflow:hidden;
+  display:flex;align-items:center;justify-content:center;
+}
+.civil-panel .civil-img{
+  position:absolute;inset:0;width:100%;height:100%;
+  object-fit:cover;object-position:center top;
+  animation:photozoom 14s ease forwards;
+}
+.civil-panel .civil-overlay{
+  position:absolute;inset:0;
+  background:linear-gradient(
+    to top,
+    rgba(61,80,48,.92) 0%,
+    rgba(61,80,48,.35) 45%,
+    rgba(61,80,48,.08) 100%
+  );
+}
+.civil-caption{
+  position:relative;z-index:2;
+  text-align:center;padding:0 2rem;max-width:560px;
+}
+.cv-label{
+  font-family:'Tenor Sans',sans-serif;
+  font-size:.85rem;letter-spacing:.5em;text-transform:uppercase;
+  color:rgba(255,255,255,.85);display:block;margin-bottom:1rem;
+}
+.cv-title{
+  font-family:'Bodoni Moda',serif;
+  font-size:clamp(2rem,5vw,3.8rem);
+  font-weight:400;font-style:italic;color:#fff;
+  line-height:1.2;margin-bottom:1.2rem;
+  text-shadow:0 2px 30px rgba(0,0,0,.35);
+}
+.cv-sub{
+  font-family:'Cormorant',serif;
+  font-size:clamp(1.05rem,2vw,1.3rem);
+  font-style:normal;font-weight:400;
+  color:rgba(255,255,255,.88);line-height:1.9;
 }
 
 /* ── REVEAL ── */
@@ -836,18 +980,63 @@ footer{
     <span class="poem-line rv" style="transition-delay:1.2s"><em>Every place, a page of something</em></span>
     <span class="poem-line rv" style="transition-delay:1.35s"><em>neither of them could have written alone.</em></span>
     <span class="poem-bold rv" style="transition-delay:1.5s">Walk with them.<br/>From the first hello — to forever.</span>
+
+    <!-- Childhood photos -->
+    <div class="childhood-strip">
+      <div class="cs-item rv" style="transition-delay:1.7s">
+        <img class="cs-photo" src="Boy_Childhood.jpeg" alt="Young Rightman"/>
+        <span class="cs-name">Rightman</span>
+      </div>
+      <div class="cs-item rv" style="transition-delay:1.9s">
+        <img class="cs-photo" src="Girl_Childhood.jpeg" alt="Young Patience"/>
+        <span class="cs-name">Patience</span>
+      </div>
+    </div>
   </div>
 </section>
+
+<!-- ══ FIRST HELLO PANEL ══ -->
+<div class="firsthello-panel" id="firsthello">
+  <div class="fh-half">
+    <img src="Love_first_sight.jpeg" alt="Love at First Sight"/>
+    <div class="fh-overlay"></div>
+    <div class="fh-caption">
+      <span class="fh-label">Something changed</span>
+      <span class="fh-name">Love at first sight</span>
+    </div>
+  </div>
+  <div class="fh-divider"></div>
+  <div class="fh-center-label"><span>&</span></div>
+  <div class="fh-half">
+    <img src="FirstHello.jpeg" alt="The First Hello"/>
+    <div class="fh-overlay"></div>
+    <div class="fh-caption">
+      <span class="fh-label">Their story begins</span>
+      <span class="fh-name">The First Hello</span>
+    </div>
+  </div>
+</div>
 
 <!-- ══ PROPOSAL PHOTO ══ -->
 <section class="proposal-panel" id="proposal">
   <img class="proposal-img" src="Proposal.jpeg" alt="The Proposal"/>
   <div class="proposal-overlay"></div>
   <div class="proposal-caption">
-    <span class="p-label rv">Chapter II · The Proposal</span>
+    <span class="p-label rv">The Proposal</span>
     <div class="p-title rv d1">She said yes<br/>before he finished<br/>asking.</div>
   </div>
 </section>
+
+<!-- ══ CIVIL CEREMONY ══ -->
+<div class="civil-panel" id="civil">
+  <img class="civil-img" src="Civil.jpeg" alt="The Civil Ceremony"/>
+  <div class="civil-overlay"></div>
+  <div class="civil-caption">
+    <span class="cv-label rv">Before the Church</span>
+    <div class="cv-title rv">The Civil Ceremony</div>
+    <p class="cv-sub rv">They made it official — pen on paper,<br/>hearts on the line.<br/>The state said yes before the church could ask.</p>
+  </div>
+</div>
 
 <!-- ══ INVITE ══ -->
 <section class="panel" id="invite">
@@ -952,36 +1141,12 @@ footer{
       <p class="rsvp-eyebrow rv">Reserve your seat</p>
       <h2 class="rsvp-title rv">Will you be there?</h2>
       <p class="rsvp-sub rv"><em>Rightman & Patience would be honoured<br/>to have you witness their forever.</em></p>
-      <form onsubmit="sendRSVP(event)" action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
-        <div class="fg-row">
-          <div class="fg"><label>First Name</label><input name="first_name" type="text" placeholder="First name" required/></div>
-          <div class="fg"><label>Last Name</label><input name="last_name" type="text" placeholder="Last name" required/></div>
-        </div>
-        <div class="fg"><label>Email</label><input name="email" type="email" placeholder="your@email.com" required/></div>
-        <div class="fg"><label>Phone</label><input name="phone" type="tel" placeholder="+250 7XX XXX XXX"/></div>
-        <div class="fg">
-          <label>Attendance</label>
-          <select name="attendance" required>
-            <option value="" disabled selected>Your attendance…</option>
-            <option>Yes — all events</option>
-            <option>Yes — Church only</option>
-            <option>Yes — Reception only</option>
-            <option>Regretfully unable to attend</option>
-          </select>
-        </div>
-        <div class="fg">
-          <label>Guests</label>
-          <select name="guests">
-            <option>Just me (1)</option>
-            <option>Myself + 1 (2)</option>
-            <option>Myself + 2 (3)</option>
-            <option>Myself + 3 (4)</option>
-          </select>
-        </div>
-        <div class="fg"><label>Message for the couple</label><textarea name="message" placeholder="Share your wishes…"></textarea></div>
-        <button type="submit" class="btn-rsvp" id="rsvpBtn"><span>Reserve My Place</span></button>
-        <p class="form-ok" id="formOk">✦ &nbsp;Thank you — your place is reserved. See you there.</p>
-      </form>
+      <iframe
+        src="https://survey123.arcgis.com/share/733f53ff297945c48f81e4a92ab9f501"
+        width="100%" height="620"
+        frameborder="0" marginheight="0" marginwidth="0"
+        style="border:none;display:block;background:transparent;">
+      </iframe>
     </div>
   </div>
 </section>
@@ -1048,7 +1213,7 @@ window.addEventListener('scroll',()=>{
 const io=new IntersectionObserver(entries=>{
   entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('on');io.unobserve(e.target);}});
 },{threshold:.1,rootMargin:'0px 0px -40px 0px'});
-document.querySelectorAll('.rv,.poem-line,.star-glyph,.poem-bold,.invite-text,.invite-names,.vcard,.cd-label,.cd-title,.cd-date-text,.cd-tile,.rsvp-eyebrow,.rsvp-title,.rsvp-sub,.p-label,.p-title').forEach(el=>io.observe(el));
+document.querySelectorAll('.rv,.poem-line,.star-glyph,.poem-bold,.invite-text,.invite-names,.vcard,.cd-label,.cd-title,.cd-date-text,.cd-tile,.rsvp-eyebrow,.rsvp-title,.rsvp-sub,.p-label,.p-title,.cs-item,.cv-label,.cv-title,.cv-sub').forEach(el=>io.observe(el));
 
 /* ══ COUNTDOWN ══ */
 (function(){
