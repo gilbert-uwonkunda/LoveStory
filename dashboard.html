@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>RSVP Dashboard · Rightman & Patience</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Tenor+Sans&family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,700;1,6..96,400&family=Cormorant:ital,wght@0,300;0,400;1,300;1,400&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --void:#526643;
+  --deep:#3d5030;
+  --leaf:#2d3d22;
+  --gold:#ffffff;
+  --accent:#c8dfc0;
+  --dim:rgba(255,255,255,.65);
+  --border:rgba(255,255,255,.12);
+}
+body{
+  background:var(--void);
+  color:var(--gold);
+  font-family:'Cormorant',Georgia,serif;
+  min-height:100vh;
+}
+
+/* ── HEADER ── */
+.dash-header{
+  background:var(--leaf);
+  border-bottom:1px solid var(--border);
+  padding:1.4rem 2rem;
+  display:flex;align-items:center;justify-content:space-between;
+  flex-wrap:wrap;gap:1rem;
+  position:sticky;top:0;z-index:100;
+}
+.dash-header h1{
+  font-family:'Bodoni Moda',serif;
+  font-size:clamp(1.2rem,2.5vw,1.8rem);
+  font-weight:700;font-style:italic;color:var(--gold);
+}
+.dash-header p{
+  font-family:'Tenor Sans',sans-serif;
+  font-size:.75rem;letter-spacing:.3em;text-transform:uppercase;
+  color:var(--accent);margin-top:.25rem;
+}
+.header-right{display:flex;align-items:center;gap:1.5rem;flex-wrap:wrap}
+.live-badge{
+  display:flex;align-items:center;gap:.55rem;
+  font-family:'Tenor Sans',sans-serif;
+  font-size:.72rem;letter-spacing:.3em;text-transform:uppercase;
+  color:#8ddf8d;
+}
+.live-dot{
+  width:8px;height:8px;border-radius:50%;
+  background:#8ddf8d;
+  animation:pulse 2s ease infinite;
+}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.25}}
+.back-link{
+  font-family:'Tenor Sans',sans-serif;
+  font-size:.72rem;letter-spacing:.25em;text-transform:uppercase;
+  color:var(--accent);text-decoration:none;
+  border:1px solid rgba(255,255,255,.2);
+  padding:.45rem 1rem;
+  transition:background .3s,color .3s;
+}
+.back-link:hover{background:var(--accent);color:var(--deep)}
+
+/* ── MAIN ── */
+.dash-main{max-width:1100px;margin:0 auto;padding:2rem}
+
+/* ── STATUS BAR ── */
+.status-bar{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:2rem;flex-wrap:wrap;gap:.8rem;
+}
+.status-text{
+  font-family:'Tenor Sans',sans-serif;
+  font-size:.72rem;letter-spacing:.2em;text-transform:uppercase;
+  color:rgba(255,255,255,.45);
+}
+
+/* ── STAT CARDS ── */
+.stats-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(210px,1fr));
+  gap:1.2rem;margin-bottom:2rem;
+}
+.stat-card{
+  background:var(--deep);
+  border:1px solid var(--border);
+  padding:1.8rem 1.5rem;
+  position:relative;overflow:hidden;
+  transition:transform .2s;
+}
+.stat-card:hover{transform:translateY(-2px)}
+.stat-card::before{
+  content:'';position:absolute;
+  top:0;left:0;width:3px;height:100%;
+  background:linear-gradient(to bottom,var(--accent),transparent);
+}
+.stat-label{
+  font-family:'Tenor Sans',sans-serif;
+  font-size:.72rem;letter-spacing:.35em;text-transform:uppercase;
+  color:var(--accent);margin-bottom:.8rem;display:block;
+}
+.stat-num{
+  font-family:'Bodoni Moda',serif;
+  font-size:clamp(2.4rem,5vw,3.4rem);
+  font-weight:700;color:var(--gold);line-height:1;
+}
+.stat-sub{
+  font-family:'Cormorant',serif;
+  font-size:.95rem;font-style:italic;
+  color:rgba(255,255,255,.55);margin-top:.5rem;
+}
+
+/* ── SECTION TITLE ── */
+.section-title{
+  font-family:'Tenor Sans',sans-serif;
+  font-size:.78rem;letter-spacing:.45em;text-transform:uppercase;
+  color:var(--accent);margin-bottom:1.2rem;
+  padding-bottom:.6rem;
+  border-bottom:1px solid var(--border);
+}
+
+/* ── EVENT BREAKDOWN ── */
+.events-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(270px,1fr));
+  gap:1.2rem;margin-bottom:2.5rem;
+}
+.event-card{
+  background:var(--deep);
+  border:1px solid var(--border);
+  padding:1.4rem 1.5rem;
+  display:flex;align-items:center;gap:1.3rem;
+}
+.event-icon{
+  font-size:1.8rem;flex-shrink:0;
+  width:50px;height:50px;
+  display:flex;align-items:center;justify-content:center;
+  background:rgba(255,255,255,.05);
+  border:1px solid var(--border);
+}
+.event-info{flex:1;min-width:0}
+.event-name{
+  font-family:'Bodoni Moda',serif;
+  font-size:1.05rem;font-weight:400;font-style:italic;
+  color:var(--gold);margin-bottom:.2rem;
+}
+.event-time{
+  font-family:'Tenor Sans',sans-serif;
+  font-size:.68rem;letter-spacing:.2em;text-transform:uppercase;
+  color:rgba(255,255,255,.5);margin-bottom:.7rem;
+}
+.event-bar-wrap{
+  height:3px;background:rgba(255,255,255,.1);
+  overflow:hidden;
+}
+.event-bar{
+  height:100%;background:var(--accent);
+  transition:width 1s cubic-bezier(.25,.46,.45,.94);width:0;
+}
+.event-count{
+  font-family:'Bodoni Moda',serif;
+  font-size:1.8rem;font-weight:700;
+  color:var(--gold);flex-shrink:0;min-width:40px;text-align:right;
+}
+
+/* ── TABLE ── */
+.table-wrap{
+  background:var(--deep);
+  border:1px solid var(--border);
+  overflow:hidden;margin-bottom:2rem;
+}
+.table-head{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:1.2rem 1.5rem;
+  border-bottom:1px solid var(--border);
+  gap:1rem;flex-wrap:wrap;
+}
+.table-head h3{
+  font-family:'Bodoni Moda',serif;
+  font-size:1.1rem;font-style:italic;color:var(--gold);
+}
+.table-actions{display:flex;gap:.8rem;flex-wrap:wrap}
+.dash-btn{
+  font-family:'Tenor Sans',sans-serif;
+  font-size:.7rem;letter-spacing:.3em;text-transform:uppercase;
+  color:var(--accent);background:transparent;
+  border:1px solid rgba(255,255,255,.2);
+  padding:.5rem 1.1rem;cursor:pointer;
+  transition:background .3s,color .3s;
+}
+.dash-btn:hover{background:var(--accent);color:var(--deep)}
+.table-scroll{overflow-x:auto}
+table{width:100%;border-collapse:collapse}
+thead th{
+  font-family:'Tenor Sans',sans-serif;
+  font-size:.68rem;letter-spacing:.28em;text-transform:uppercase;
+  color:var(--accent);padding:.85rem 1.2rem;
+  text-align:left;
+  border-bottom:1px solid var(--border);
+  white-space:nowrap;background:rgba(0,0,0,.1);
+}
+tbody tr{border-bottom:1px solid rgba(255,255,255,.05);transition:background .2s}
+tbody tr:last-child{border-bottom:none}
+tbody tr:hover{background:rgba(255,255,255,.04)}
+tbody td{
+  font-family:'Cormorant',serif;
+  font-size:1rem;color:var(--gold);
+  padding:.8rem 1.2rem;vertical-align:middle;
+}
+.pill{
+  display:inline-block;
+  font-family:'Tenor Sans',sans-serif;
+  font-size:.62rem;letter-spacing:.18em;text-transform:uppercase;
+  padding:.28rem .7rem;
+  border:1px solid rgba(255,255,255,.2);
+  white-space:nowrap;
+}
+.pill-yes{color:#a8d5a8;border-color:rgba(168,213,168,.4)}
+.pill-no{color:rgba(255,255,255,.4);border-color:rgba(255,255,255,.15)}
+
+/* ── EMPTY / ERROR / SKELETON ── */
+.empty-state{
+  padding:3rem;text-align:center;
+  font-family:'Tenor Sans',sans-serif;
+  font-size:.78rem;letter-spacing:.3em;text-transform:uppercase;
+  color:rgba(255,255,255,.35);
+}
+.error-card{
+  background:var(--deep);
+  border:1px solid rgba(255,130,130,.2);
+  padding:2rem 2rem;text-align:center;margin:1rem 0;
+}
+.error-card h3{
+  font-family:'Bodoni Moda',serif;font-style:italic;
+  color:#ffaaaa;font-size:1.3rem;margin-bottom:.8rem;
+}
+.error-card p{
+  font-family:'Cormorant',serif;font-size:1.05rem;
+  color:rgba(255,255,255,.75);line-height:1.9;
+}
+.error-card code{
+  background:rgba(255,255,255,.08);padding:.2rem .5rem;
+  font-size:.85rem;
+}
+.skeleton{
+  background:linear-gradient(90deg,rgba(255,255,255,.04) 25%,rgba(255,255,255,.09) 50%,rgba(255,255,255,.04) 75%);
+  background-size:200% 100%;
+  animation:shimmer 1.5s infinite;
+  border-radius:2px;height:1em;display:block;
+}
+@keyframes shimmer{to{background-position:-200% 0}}
+
+/* ── FOOTER ── */
+.dash-footer{
+  text-align:center;padding:2rem;
+  font-family:'Tenor Sans',sans-serif;
+  font-size:.72rem;letter-spacing:.3em;text-transform:uppercase;
+  color:rgba(255,255,255,.3);
+}
+
+/* ── MOBILE ── */
+@media(max-width:640px){
+  .dash-main{padding:1rem}
+  thead{display:none}
+  tbody tr{display:block;padding:.6rem 0;border-bottom:1px solid rgba(255,255,255,.08)}
+  tbody td{
+    display:flex;gap:.8rem;
+    padding:.3rem 1rem;align-items:baseline;
+  }
+  tbody td::before{
+    content:attr(data-label);
+    font-family:'Tenor Sans',sans-serif;
+    font-size:.62rem;letter-spacing:.2em;text-transform:uppercase;
+    color:var(--accent);flex-shrink:0;min-width:90px;
+  }
+}
+</style>
+</head>
+<body>
+
+<header class="dash-header">
+  <div>
+    <h1>Rightman & Patience</h1>
+    <p>RSVP Dashboard &nbsp;·&nbsp; 01 July 2026 &nbsp;·&nbsp; Kigali, Rwanda</p>
+  </div>
+  <div class="header-right">
+    <div class="live-badge"><span class="live-dot"></span>Live</div>
+    <a href="index.html" class="back-link">← Invitation</a>
+  </div>
+</header>
+
+<main class="dash-main">
+
+  <div class="status-bar">
+    <span class="status-text" id="lastUpdated">Loading responses…</span>
+    <span class="status-text" id="countdown"></span>
+  </div>
+
+  <div class="stats-grid" id="statsGrid">
+    <div class="stat-card">
+      <span class="skeleton" style="width:55%;margin-bottom:.8rem"></span>
+      <span class="skeleton" style="width:35%;height:2.8rem"></span>
+    </div>
+    <div class="stat-card">
+      <span class="skeleton" style="width:55%;margin-bottom:.8rem"></span>
+      <span class="skeleton" style="width:35%;height:2.8rem"></span>
+    </div>
+    <div class="stat-card">
+      <span class="skeleton" style="width:55%;margin-bottom:.8rem"></span>
+      <span class="skeleton" style="width:35%;height:2.8rem"></span>
+    </div>
+    <div class="stat-card">
+      <span class="skeleton" style="width:55%;margin-bottom:.8rem"></span>
+      <span class="skeleton" style="width:35%;height:2.8rem"></span>
+    </div>
+  </div>
+
+  <p class="section-title">Attendance Per Event</p>
+  <div class="events-grid" id="eventsGrid">
+    <div class="event-card"><span class="skeleton" style="width:50px;height:50px;flex-shrink:0"></span><div style="flex:1"><span class="skeleton" style="margin-bottom:.5rem"></span><span class="skeleton" style="width:60%"></span></div></div>
+    <div class="event-card"><span class="skeleton" style="width:50px;height:50px;flex-shrink:0"></span><div style="flex:1"><span class="skeleton" style="margin-bottom:.5rem"></span><span class="skeleton" style="width:60%"></span></div></div>
+    <div class="event-card"><span class="skeleton" style="width:50px;height:50px;flex-shrink:0"></span><div style="flex:1"><span class="skeleton" style="margin-bottom:.5rem"></span><span class="skeleton" style="width:60%"></span></div></div>
+  </div>
+
+  <div class="table-wrap">
+    <div class="table-head">
+      <h3>All Responses</h3>
+      <div class="table-actions">
+        <button class="dash-btn" onclick="load()">↻ Refresh</button>
+        <button class="dash-btn" onclick="exportCSV()">↓ Export CSV</button>
+      </div>
+    </div>
+    <div id="tableArea" class="table-scroll">
+      <div class="empty-state">Loading…</div>
+    </div>
+  </div>
+
+</main>
+
+<footer class="dash-footer">
+  Rightman & Patience &nbsp;·&nbsp; 01 July 2026 &nbsp;·&nbsp; Kigali, Rwanda
+</footer>
+
+<script>
+const ITEM_ID = '733f53ff297945c48f81e4a92ab9f501';
+const PORTAL  = 'https://www.arcgis.com';
+
+let allData   = [];  // cached for CSV export
+let tick      = 60;
+let tickTimer = null;
+
+/* ── utils ── */
+const $  = id => document.getElementById(id);
+const pad = n  => String(n).padStart(2,'0');
+
+function guestCount(val){
+  if(!val) return 1;
+  const m = String(val).match(/\((\d+)\)/);
+  return m ? parseInt(m[1]) : 1;
+}
+
+function isYes(val){
+  return val && String(val).toLowerCase().includes('yes');
+}
+
+function pillClass(val){
+  return isYes(val) ? 'pill-yes' : 'pill-no';
+}
+
+/* find field name by partial keyword match */
+function findField(keys, ...words){
+  return keys.find(k =>
+    words.some(w => k.toLowerCase().includes(w.toLowerCase()))
+  ) || null;
+}
+
+/* ── skeleton helper ── */
+function skeletonCards(n){
+  return Array(n).fill(0).map(()=>`
+    <div class="stat-card">
+      <span class="skeleton" style="width:55%;margin-bottom:.8rem"></span>
+      <span class="skeleton" style="width:35%;height:2.8rem"></span>
+    </div>`).join('');
+}
+
+/* ── main load ── */
+async function load(){
+  try {
+    /* Step 1: find the feature service through related items */
+    const relUrl = `${PORTAL}/sharing/rest/content/items/${ITEM_ID}/relatedItems` +
+                   `?relationshipType=Survey2Service&direction=forward&f=json`;
+    const relJson = await fetch(relUrl).then(r => r.json());
+
+    if(!relJson.relatedItems || !relJson.relatedItems.length)
+      throw new Error(
+        'Feature service not found.<br/>In Survey123 → Share, set the results layer to <code>Everyone (public)</code>.'
+      );
+
+    const svcUrl = relJson.relatedItems[0].url;
+
+    /* Step 2: query all features */
+    const qUrl = `${svcUrl}/0/query?where=1%3D1&outFields=*&returnGeometry=false` +
+                 `&orderByFields=objectid+DESC&resultRecordCount=1000&f=json`;
+    const data  = await fetch(qUrl).then(r => r.json());
+
+    if(data.error) throw new Error(data.error.message || 'Query error.');
+
+    render(data);
+
+  } catch(err){
+    $('statsGrid').innerHTML   = '';
+    $('eventsGrid').innerHTML  = '';
+    $('tableArea').innerHTML   = `
+      <div class="error-card">
+        <h3>Could not load responses</h3>
+        <p>${err.message}<br/><br/>
+        Once you enable public access the dashboard will load automatically.</p>
+      </div>`;
+    $('lastUpdated').textContent = 'Failed · ' + new Date().toLocaleTimeString();
+  }
+}
+
+/* ── render ── */
+function render(data){
+  const features = data.features || [];
+  const attrs    = features.map(f => f.attributes);
+  allData        = attrs;  // cache for export
+
+  /* detect field names from first record's keys */
+  const keys = attrs.length ? Object.keys(attrs[0]) : [];
+
+  const fFirst = findField(keys,'first_name','firstname','first');
+  const fLast  = findField(keys,'last_name','lastname','last');
+  const fEmail = findField(keys,'email');
+  const fPhone = findField(keys,'phone');
+  const fAtt   = findField(keys,'attendance','attend');
+  const fGuest = findField(keys,'guests','guest','number_of_guest');
+  const fMsg   = findField(keys,'message','wish','note');
+
+  /* ── counts ── */
+  const total    = attrs.length;
+  const yesAll   = attrs.filter(a => fAtt && /all events/i.test(a[fAtt]||''));
+  const yesChurch= attrs.filter(a => fAtt && /church only/i.test(a[fAtt]||''));
+  const yesRecep = attrs.filter(a => fAtt && /reception only/i.test(a[fAtt]||''));
+  const no       = attrs.filter(a => fAtt && !isYes(a[fAtt]));
+  const confirmed= total - no.length;
+
+  const totalGuests = attrs.reduce((s,a)=>s + guestCount(fGuest ? a[fGuest] : null),0);
+
+  const dowryCount   = yesAll.length;
+  const churchCount  = yesAll.length + yesChurch.length;
+  const recepCount   = yesAll.length + yesRecep.length;
+  const maxCount     = Math.max(dowryCount, churchCount, recepCount, 1);
+
+  /* ── stat cards ── */
+  $('statsGrid').innerHTML = [
+    {label:'Total RSVPs',      num:total,       sub:'responses received',          accent:false},
+    {label:'Confirmed',        num:confirmed,   sub:'attending one or more events', accent:true},
+    {label:'Not Attending',    num:no.length,   sub:'regretfully unable to come',   accent:false},
+    {label:'Expected Guests',  num:totalGuests, sub:'total people attending',       accent:false},
+  ].map(s=>`
+    <div class="stat-card">
+      <span class="stat-label">${s.label}</span>
+      <span class="stat-num">${pad(s.num)}</span>
+      <span class="stat-sub">${s.sub}</span>
+    </div>`).join('');
+
+  /* ── event breakdown ── */
+  $('eventsGrid').innerHTML = [
+    {icon:'🐄', name:'Introduction & Dowry', time:'08:30 AM · Green Jade Rebero', count:dowryCount},
+    {icon:'⛪', name:'Church Ceremony',       time:'02:00 PM · CLA Nyarutarama',   count:churchCount},
+    {icon:'🥂', name:'Reception',            time:'04:30 PM · Green Jade Rebero', count:recepCount},
+  ].map(e=>`
+    <div class="event-card">
+      <div class="event-icon">${e.icon}</div>
+      <div class="event-info">
+        <div class="event-name">${e.name}</div>
+        <div class="event-time">${e.time}</div>
+        <div class="event-bar-wrap">
+          <div class="event-bar" id="bar-${e.icon}" style="width:0%"></div>
+        </div>
+      </div>
+      <div class="event-count">${pad(e.count)}</div>
+    </div>`).join('');
+
+  /* animate bars after paint */
+  requestAnimationFrame(()=>{
+    [
+      {icon:'🐄',count:dowryCount},
+      {icon:'⛪',count:churchCount},
+      {icon:'🥂',count:recepCount},
+    ].forEach(e=>{
+      const bar = document.getElementById('bar-'+e.icon);
+      if(bar) bar.style.width = (e.count/maxCount*100).toFixed(1)+'%';
+    });
+  });
+
+  /* ── table ── */
+  if(!attrs.length){
+    $('tableArea').innerHTML = `<div class="empty-state">No responses yet — check back soon.</div>`;
+  } else {
+    const cols = [
+      {label:'#',          key:'_idx'},
+      {label:'Name',       key:'_name'},
+      fEmail && {label:'Email',    key:fEmail},
+      fPhone && {label:'Phone',    key:fPhone},
+      fAtt   && {label:'Attendance',key:fAtt},
+      fGuest && {label:'Guests',   key:fGuest},
+    ].filter(Boolean);
+
+    $('tableArea').innerHTML = `
+      <table>
+        <thead>
+          <tr>${cols.map(c=>`<th>${c.label}</th>`).join('')}</tr>
+        </thead>
+        <tbody>
+          ${attrs.map((a,i)=>{
+            const name = [fFirst&&a[fFirst],fLast&&a[fLast]].filter(Boolean).join(' ')||'—';
+            return `<tr>${cols.map(c=>{
+              let val = '';
+              if(c.key==='_idx')  val = attrs.length - i;
+              else if(c.key==='_name') val = name;
+              else val = a[c.key] != null ? a[c.key] : '—';
+
+              const isAtt = c.key === fAtt;
+              const cell  = isAtt
+                ? `<span class="pill ${pillClass(val)}">${val}</span>`
+                : val;
+              return `<td data-label="${c.label}">${cell}</td>`;
+            }).join('')}</tr>`;
+          }).join('')}
+        </tbody>
+      </table>`;
+  }
+
+  $('lastUpdated').textContent = 'Updated: ' + new Date().toLocaleTimeString();
+}
+
+/* ── CSV export ── */
+function exportCSV(){
+  if(!allData.length){ alert('No data to export yet.'); return; }
+  const keys  = Object.keys(allData[0]);
+  const rows  = [keys.join(',')].concat(
+    allData.map(a => keys.map(k => {
+      const v = a[k] == null ? '' : String(a[k]).replace(/"/g,'""');
+      return `"${v}"`;
+    }).join(','))
+  );
+  const blob = new Blob([rows.join('\n')], {type:'text/csv'});
+  const url  = URL.createObjectURL(blob);
+  const a    = document.createElement('a');
+  a.href = url;
+  a.download = `rsvp_${new Date().toISOString().slice(0,10)}.csv`;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+/* ── auto refresh every 60 s ── */
+function startTick(){
+  tick = 60;
+  clearInterval(tickTimer);
+  tickTimer = setInterval(()=>{
+    tick--;
+    $('countdown').textContent = `Auto-refresh in ${tick}s`;
+    if(tick <= 0){ load(); startTick(); }
+  }, 1000);
+}
+
+load();
+startTick();
+</script>
+</body>
+</html>
